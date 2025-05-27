@@ -11,6 +11,7 @@ function TaskList() {
           { id: 2, title: "Buy groceries", category: "Personal", done: false },
         ];
   });
+
   const [newTask, setNewTask] = useState("");
   const [category, setCategory] = useState("General");
   const [filter, setFilter] = useState("all");
@@ -23,7 +24,12 @@ function TaskList() {
     if (newTask.trim()) {
       setTasks([
         ...tasks,
-        { id: tasks.length + 1, title: newTask, category, done: false },
+        {
+          id: tasks.length + 1,
+          title: newTask,
+          category,
+          done: false,
+        },
       ]);
       setNewTask("");
       setCategory("General");
@@ -33,12 +39,17 @@ function TaskList() {
   const toggleDone = (id) => {
     setTasks(
       tasks.map((task) =>
-        task.id === id ? { ...task, done: !task.done } : task,
-      ),
+        task.id === id ? { ...task, done: !task.done } : task
+      )
     );
   };
 
-  const filteredTasks = filter === "all" ? tasks : tasks.filter((task) => task.done);
+  const deleteTask = (id) => {
+    setTasks(tasks.filter((task) => task.id !== id));
+  };
+
+  const filteredTasks =
+    filter === "all" ? tasks : tasks.filter((task) => task.done);
 
   return (
     <div className="max-w-3xl mx-auto px-4">
@@ -97,11 +108,17 @@ function TaskList() {
               category={task.category}
               done={task.done}
               onToggle={toggleDone}
+              onDelete={deleteTask}
             />
           ))
         ) : (
           <div className="text-center text-gray-600 py-8">
-            <p>No tasks to show. {filter === "done" ? "Mark some tasks as done!" : "Add a new task!"}</p>
+            <p>
+              No tasks to show.{" "}
+              {filter === "done"
+                ? "Mark some tasks as done!"
+                : "Add a new task!"}
+            </p>
           </div>
         )}
       </ul>
